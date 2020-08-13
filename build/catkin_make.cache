@@ -1,2 +1,0 @@
-slam
--DCATKIN_DEVEL_PREFIX=/home/demo/slam_with_yolo/devel -DCMAKE_INSTALL_PREFIX=/home/demo/slam_with_yolo/install -G Unix Makefiles
