@@ -1,3 +1,7 @@
+/* A demo of slam with yolo to get cloud with its position.
+ * See README.md for more details.
+ * By blb, 2020.
+*/
 #include "base.h"
 using namespace std;
 
