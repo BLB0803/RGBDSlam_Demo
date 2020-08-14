@@ -1,7 +1,7 @@
 # RGBDSlam_Demo
 #### A simple RGBD-Slam system, NOT finished yet
 练手用，暂时施工中，持续更新XD
-参考高博的十四讲结合一些零碎教程伴着google+stack制作，十四讲所有内容都写到一起去了，打算参考ORB-SLAM2的结构，把系统和数据分开。
+参考高博的十四讲结合一些零碎教程伴着Google+StackOverFlow制作，十四讲所有内容都写到一起去了，打算参考ORB-SLAM2的结构，把系统和数据分开。
 依赖：OpenCV3、PCL、Eigen3，后续会需要g2o和Ceres，具体见里面的CMakeLists吧..
 代码我都加了注释了，有同样跟着十四讲学过的应该很容易看明白，当作参考吧..
 
