@@ -20,7 +20,7 @@ SLAM::~SLAM(){
 }
 
 /*********************************
- * Ros's call back func, needs two [sensor_msgs::Image] scriber with RGB image & Depth image.
+ * Ros's callback func, needs two [sensor_msgs::Image] scriber with RGB image & Depth image.
  *********************************/
 void SLAM::callBack(const sensor_msgs::ImageConstPtr &rgb, const sensor_msgs::ImageConstPtr &depth){
     CAMERA camera;
@@ -33,6 +33,9 @@ void SLAM::callBack(const sensor_msgs::ImageConstPtr &rgb, const sensor_msgs::Im
         cv::drawMatches(_preFrame.rgb, _preFrame.kp, frame.rgb, frame.kp, goodMatches, imgMatches);
         cv::imshow( "good matches", imgMatches);
         cv::waitKey(1);
+
+
+
         vector<cv::Point3f> preFrame3dPoint;
         vector<cv::Point2f> frame2dPoint;
         for(int i = 0; i < goodMatches.size(); i++){

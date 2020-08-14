@@ -29,7 +29,7 @@ FRAME& FRAME::operator =(const FRAME& f){
 /*********************************
  * For processing images, we should convert Ros's image message to OpenCV image.
  * Use this func to convert a [sensor_msgs::Image] to [cv::Mat].
- * Be careful with depth image's encoding while using.
+ * Be careful with depth image's encoding when use, ur encoding may NOT BE 32FC1.
  *********************************/
 cv::Mat FRAME::msgToMat(const sensor_msgs::ImageConstPtr &msg){
     cv::Mat img;
@@ -73,6 +73,12 @@ cv::Mat FRAME::rgbTogray(const cv::Mat& rgb){
 /*********************************
  * Wanna match two images, we should get keypoints &  descrip of every image.
  * Use these two func below to get [vector<cv::KeyPoint> kp] and [cv::Mat desp] for ur FRAME.
+ * e.g. For a keypoint cv::KeyPoint kp :
+ *     kp.angle : Direction of the point.
+ *     kp.octave : In which interval (seems like in which octave, anyway..not important) we got the point.
+ *     kp.pt : Coordinates in image of the point.
+ *     kp.response : For describing how good the point is.
+ *     kp.size : Just .. size of the point.
  *********************************/
 vector<cv::KeyPoint> FRAME::detectKeyPoints(const cv::Mat& rgb){
     //Create ORB detector
@@ -90,17 +96,14 @@ vector<cv::KeyPoint> FRAME::detectKeyPoints(const cv::Mat& rgb){
     }
     return keyPoints;
 }
-
+// Func for computing descrip, needs source image and its keypoints vector at same time.
 cv::Mat FRAME::computeDesp(const cv::Mat& rgb, vector<cv::KeyPoint>& kp){
     //Create ORB descriptor
     cv::Ptr<cv::DescriptorExtractor> descriptor = cv::ORB::create();
-    // Tried to catch some error info here, but not work.
-    // Considering callback wouldnt run when theres no msg recived.
-    // They had thought all of things for u. :(
     cv::Mat desp;
     try{
         descriptor->compute(rgbTogray(rgb), kp, desp);
-        // Should convert descriptor to CV_32F format when using FlannBasedMatcher.
+        // Should convert descriptor to CV_32F format when using FlannBasedMatcher for matching.
         // See https://stackoverflow.com/questions/29694490/flann-error-in-opencv-3
         desp.convertTo(desp, CV_32F);
     }
