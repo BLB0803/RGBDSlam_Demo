@@ -42,10 +42,13 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/registration/icp.h>
 
-//Eigen3 lib
+// Eigen3 lib
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+
+// My lib
+#include "frame.h"
 using namespace std;
 
 typedef pcl::PointXYZRGB PointT;
@@ -57,13 +60,6 @@ struct CAMERA{
     int scale; 
 };
 
-struct FRAME{
-    cv::Mat rgb;
-    cv::Mat depth;
-    vector<cv::KeyPoint> kp;
-    cv::Mat desp;      
-};
-
 struct POSE{
     cv::Mat rMat, tMat;
     int inliers; 
@@ -72,22 +68,18 @@ struct POSE{
 class SLAM{
 public:
     SLAM(ros::NodeHandle &n);
-    void callBack(const sensor_msgs::ImageConstPtr &rgb, const sensor_msgs::ImageConstPtr &depth);
-    cv::Mat msgToMat(const sensor_msgs::ImageConstPtr &msg);
-    cv::Mat rgbTogray(cv::Mat rgb);
-    cv::Mat floatToMono8(const cv::Mat& floatImg);
-    void detectKeyPointsAndDesp(FRAME& f);
-    void matchTwoFrame(FRAME& f1, FRAME& f2, vector<cv::DMatch>& goodMatches);
-    cv::Point3f point2dTo3d(cv::Point3f& p, CAMERA& c);
-
+    ~SLAM();
+    
 private:
+    void callBack(const sensor_msgs::ImageConstPtr &rgb, const sensor_msgs::ImageConstPtr &depth);
+    void matchTwoFrame(FRAME& f1, FRAME& f2, vector<cv::DMatch>& goodMatches);
+    cv::Point3f point2dTo3d(const cv::Point3f& p, const CAMERA& c);
+    
     message_filters::Subscriber<sensor_msgs::Image>* _depthSubscriber;    
     message_filters::Subscriber<sensor_msgs::Image>* _rgbSubscriber;
     message_filters::Synchronizer<MySyncPolicy>* _sync;
     FRAME _preFrame;
 
 };
-void msgTomat(const sensor_msgs::ImageConstPtr &rgb, const sensor_msgs::ImageConstPtr &depth);
-
 #endif
 

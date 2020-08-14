@@ -41,7 +41,7 @@ add_definitions(
   ${EIGEN_DEFINITIONS}
 )
 
-add_executable(${PROJECT_NAME}_node src/main.cpp src/base.cpp
+add_executable(${PROJECT_NAME}_node src/main.cpp src/base.cpp src/frame.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}_node
